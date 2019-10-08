@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EmployeeManagementSystem.Models;
+using EmployeeManagementSystem.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -56,8 +57,34 @@ namespace EmployeeManagementSystem
                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
                options.Filters.Add(new AuthorizeFilter(policy));
            }).AddXmlSerializerFormatters();
+
+            services.AddAuthentication().AddGoogle(options =>
+            {
+                options.ClientId = "894461769365-7hj9q25tqf6ttgd66g3bglglevf2gft2.apps.googleusercontent.com";
+                options.ClientSecret = "TEPbVYg8_GHl9xS-Ly-gIJVP";
+            });
+
+                
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.AccessDeniedPath = new PathString("/Administration/AccessDenied");
+            });
+
+
+            services.AddAuthorization(options =>
+            {
+                //options.AddPolicy("EditRolePolicy", policy => policy.RequireAssertion(context => context.User.IsInRole("Admin")
+                //&&context.User.HasClaim(claim=>claim.Type== "Edit Role" && claim.Value=="true") || context.User.IsInRole("Super Admin")));
+                options.AddPolicy("EditRolePolicy", policy => policy.AddRequirements(new ManageAdminRolesAndClaimsRequirement()));
+                options.AddPolicy("DeleteRolePolicy", policy => policy.RequireClaim("Delete Role", "true"));
+                options.AddPolicy("AdminRolePolicy", policy => policy.RequireRole("Admin"));
+            });
+           
             //services.AddSingleton<IEmployeeRepository, MockEmployeeRepository>();
             services.AddScoped<IEmployeeRepository, SQLEmployeeRepository>();
+            services.AddSingleton<IAuthorizationHandler, CanEditOnlyOtherAdminRolesandClaimsHandler>();
+            services.AddSingleton<IAuthorizationHandler, SuperAdminHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -81,12 +108,13 @@ namespace EmployeeManagementSystem
             }
             ///Add the Authentication middele ware In the Application request processing pipeline 
             ///ie configure method in startup class we need to call method
-            app.UseAuthentication();
+             app.UseAuthentication();
+           // app.UseDefaultFiles();
             
             app.UseStaticFiles();
             // app.UseMvcWithDefaultRoute();
             // app.UseMvc(routes=> routes.MapRoute("default", "{controller=home}/{action=index}/{id?}"));
-            app.UseMvc();
+           app.UseMvc();
             
 
            

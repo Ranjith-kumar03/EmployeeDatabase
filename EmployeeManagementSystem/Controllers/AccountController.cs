@@ -59,6 +59,10 @@ namespace EmployeeManagementSystem.Controllers
                var result=await userManager.CreateAsync(user, model.Password);
                 if(result.Succeeded)
                 {
+                    if(signManager.IsSignedIn(User)&&User.IsInRole("Admin"))
+                    {
+                        return RedirectToAction("ListUsers", "administration");
+                    }
                     //2nd parametr asks for Session cookie or permanent cooke
                     // we go for session cookie
                    await  signManager.SignInAsync(user, isPersistent: false);// isPersistion session should not be persistient
@@ -74,9 +78,15 @@ namespace EmployeeManagementSystem.Controllers
         }
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Login()
+        public async Task<IActionResult> Login(string returnUrl)
         {
-            return View();
+            LogInViewModel model = new LogInViewModel()
+            {
+                ReturnUrl = returnUrl,
+                externalLogIns = (await signManager.GetExternalAuthenticationSchemesAsync()).ToList()
+            };
+            
+            return View(model);
         }
         [HttpPost]
         [AllowAnonymous]
@@ -115,5 +125,16 @@ namespace EmployeeManagementSystem.Controllers
            await  signManager.SignOutAsync();
             return RedirectToAction("index", "home");
         }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public  IActionResult ExternalLogin(string provider, string returnUrl)
+        {
+            var redirectUrl = Url.Action("ExternalLoginCallBack", "Account", new { ReturnUrl = returnUrl });
+
+            var properties = signManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+            return new ChallengeResult(provider, properties);
+        }
+
     }
 }

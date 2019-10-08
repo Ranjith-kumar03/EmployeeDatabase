@@ -1,4 +1,4 @@
-﻿
+﻿'use strict';
 
 function confirmDelete(uniqueId, isDeleteClicked) {
     var deleteSpan = 'deleteSpan_' + uniqueId;
@@ -12,20 +12,6 @@ function confirmDelete(uniqueId, isDeleteClicked) {
         $('#' + confirmDeleteSpan).hide();
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 //function deleteConfirmation(id, delete_or_not) {
 //    alert("hello iam working");
@@ -41,3 +27,4 @@ function confirmDelete(uniqueId, isDeleteClicked) {
 //        $('#' + confirmdeleteSpa).hide();
 //    }
 //}
+

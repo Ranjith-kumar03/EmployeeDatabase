@@ -22,6 +22,11 @@ namespace EmployeeManagementSystem.Models
             //Keys of Identity Table are mapped OnModelCreating method
             base.OnModelCreating(modelBuilder);
             modelBuilder.Seed();
+            foreach(var foreignkey in modelBuilder.Model.GetEntityTypes()
+                .SelectMany(e=>e.GetForeignKeys()))
+            {
+                foreignkey.DeleteBehavior = DeleteBehavior.Restrict;
+            }
         }
 
     }

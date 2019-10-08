@@ -17,6 +17,10 @@
 
     </environment>
     <environment exclude="Development">
+        <script src="~/lib/JQuery/jquery.js"></script>
+        <script src="~/lib/jquery-validate/jquery.validate.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+        <script src="~/lib/twitter-bootstrap/js/bootstrap.bundle.min.js"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
               integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
               crossorigin="anonymous"
@@ -25,7 +29,7 @@
               asp-fallback-test-property="posistion"
               asp-fallback-test-value="absolute"
               asp-suppress-fallback-integrity="true">
-       
+
 
     </environment>
    
@@ -47,7 +51,22 @@
 
                     <li class="nav-item"> <a asp-controller="home" asp-action="index" class="nav-link ">List</a></li>
                     <li class="nav-item"> <a asp-controller="home" asp-action="create" class="nav-link ">Create</a></li>
-                    
+                    @if (signinManager.IsSignedIn(User) && (User.IsInRole("Admin") ||User.IsInRole("Super Admin")))
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Manage
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <a asp-controller="administration" asp-action="listusers" class="dropdown-item">Users</a>
+                                <a asp-controller="administration" asp-action="listRoles" class="dropdown-item">Roles</a>
+
+
+                            </div>
+
+                        </li>
+                    }
 
                 </ul>
                 

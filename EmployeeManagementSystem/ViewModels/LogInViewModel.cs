@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Authentication;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -16,5 +17,11 @@ namespace EmployeeManagementSystem.ViewModels
         public string Password { get; set; }
         [Display(Name ="Remember Me")]
         public bool RememberMe { get; set; }
+        public string ReturnUrl { get; set; }
+
+       
+        public int MyProperty { get; set; }
+        //list of External Configured Authetication Providers
+        public IList<AuthenticationScheme> externalLogIns { get; set; }
     }
 }

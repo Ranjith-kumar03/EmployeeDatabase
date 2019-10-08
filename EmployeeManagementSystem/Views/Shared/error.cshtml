@@ -1,15 +1,27 @@
-﻿<h3>Errot Ocurred Support Team is notified Pleas ego andcome back</h3>
-<h5> Please contact us on null@pull.mull</h5>
-<hr />
+﻿@if (ViewBag.ErrorTitle == null)
+{
+    <h3>Errot Ocurred Support Team is notified Pleas ego andcome back</h3>
+    <h5> Please contact us on null@pull.mull</h5>
+    <hr />
+}
+else
+{
+<h1 class="text-danger">@ViewBag.ErrorTitle</h1>
+<h6 class="text-danger">@ViewBag.ErrorMessage</h6>
+
+
+
+
+}
 @*<div class="alert alert-danger">
-    <h5>EXception Path</h5>
-    <p>@ViewBag.ExceptionPath</p>
-</div>
-<div class="alert alert-danger">
-    <h5>Exception Message</h5>
-    <p> @ViewBag.ExceptionMessage</p>
-</div>
-<div class="alert alert-danger">
-    <h5>Exception Stack Trace</h5>
-    <p> @ViewBag.StackTrace</p>
-</div>*@
+        <h5>EXception Path</h5>
+        <p>@ViewBag.ExceptionPath</p>
+    </div>
+    <div class="alert alert-danger">
+        <h5>Exception Message</h5>
+        <p> @ViewBag.ExceptionMessage</p>
+    </div>
+    <div class="alert alert-danger">
+        <h5>Exception Stack Trace</h5>
+        <p> @ViewBag.StackTrace</p>
+    </div>*@
